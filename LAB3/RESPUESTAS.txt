@@ -1,0 +1,14 @@
+Control de hilos con wait/notify. Productor/consumidor.
+
+1. Revise el funcionamiento del programa y ejecútelo. Mientras esto ocurren, ejecute jVisualVM y revise el consumo de 
+   CPU del proceso correspondiente. A qué se debe este consumo?, cual es la clase responsable?
+
+   Se sabe que la clase Producer y la clase Consumer se ejecutan en hilos separados sin embargo, el mayor consumo se le atribuye a la clase Consumer, 
+   dado que este no tiene nigun tipo de tiempo de espera. En ambas clases se ejecuta un start() lo que permite que se cree un nuevo hilo y asi mismo 
+   ejecutar el metodo run por cada nuevo Producer y Consumer
+
+2. Haga los ajustes necesarios para que la solución use más eficientemente la CPU, teniendo en cuenta que -por ahora-
+   la producción es lenta y el consumo es rápido. Verifique con JVisualVM que el consumo de CPU se reduzca.
+
+   Se realizan cambios en la clase de consumidor, productor y startProduction en este caso creando un objeto de sincronizacion 
+   entre consumidor y productor y haciendo que el consumidor tenga que esperar al productor para poder hacer su debida acción.
