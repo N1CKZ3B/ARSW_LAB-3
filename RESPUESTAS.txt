@@ -12,3 +12,14 @@ Control de hilos con wait/notify. Productor/consumidor.
 
    Se realizan cambios en la clase de consumidor, productor y startProduction en este caso creando un objeto de sincronizacion 
    entre consumidor y productor y haciendo que el consumidor tenga que esperar al productor para poder hacer su debida acción.
+
+3. Haga que ahora el productor produzca muy rápido, y el consumidor consuma lento. Teniendo en cuenta que el productor conoce un límite de Stock (cuantos elementos debería tener, a lo sumo en la cola), haga que dicho límite se respete. Revise el API de la colección usada como cola para ver cómo garantizar que dicho límite no se supere. Verifique que, al poner un límite pequeño para el 'stock', no haya consumo alto de CPU ni errores.
+
+   Se crea una variable de sincronizacion que permite que el consumidor consuma más lento y que cuando haya comido todo le notifique al productor que debe producir nuevamente, de este mismo modo, se respeta el limite al sincronizar esto mismo y utlizar un wait para dejar de producir hasta que nuevamente el consumidor le vuelva a notificar que lo debe hacer nuevamente.
+
+Parte II.
+
+- La búsqueda distribuida se detenga (deje de buscar en las listas negras restantes) y retorne la respuesta apenas, en su conjunto, los hilos hayan detectado el número de ocurrencias requerido que determina si un host es confiable o no (_BLACK_LIST_ALARM_COUNT_).
+- Lo anterior, garantizando que no se den condiciones de carrera.
+
+   Se garantiza que no se generen condiciones carrera al crear un bloque sincronizado con un objeto que nos va a ayudar a llevar los casos concurrentes, en este caso y especialmente sobre el conteo de ocurrencias encontradas, cuando este valor llegue al maximo que se estaba buscando va a parar la ejecucion y va a mostrar los resultados, cabe aclarar que para lograr esto no se modifico nada mas que la clase de HostBlackListValidator y el MaliciousHostCounter
