@@ -23,3 +23,24 @@ Parte II.
 - Lo anterior, garantizando que no se den condiciones de carrera.
 
    Se garantiza que no se generen condiciones carrera al crear un bloque sincronizado con un objeto que nos va a ayudar a llevar los casos concurrentes, en este caso y especialmente sobre el conteo de ocurrencias encontradas, cuando este valor llegue al maximo que se estaba buscando va a parar la ejecucion y va a mostrar los resultados, cabe aclarar que para lograr esto no se modifico nada mas que la clase de HostBlackListValidator y el MaliciousHostCounter
+
+Parte III
+
+2. Revise el código e identifique cómo se implemento la funcionalidad antes indicada. Dada la intención del juego, un invariante debería ser que la sumatoria de los puntos de vida de todos los jugadores siempre sea el mismo(claro está, en un instante de tiempo en el que no esté en proceso una operación de incremento/reducción de tiempo). Para este caso, para N jugadores, cual debería ser este valor?.
+
+   Al verificar el codigo se presupone que los N inmortales van a tener todos la misma cantida de vida, se presupone que siempre la sumatoria de estos debe ser N*vidaporinmortal , en este caso siempre, hasta incluso cuando haya un ganador deb tener este ultimo como vida la misma que este tiene sumada la de sus N-1 contrincantes.
+
+3. Ejecute la aplicación y verifique cómo funcionan las opción ‘pause and check’. Se cumple el invariante?.
+
+   Al momento de hacer el primer pause and check casi instantaneo los valores ya cambian, en este caso con 3 inmortales que comienzan la partida al cabo de poco tiempo tienen una sumatoria de 360 cuando al principio a cada uno le fueron dados 100 puntos de vida, no se cumple el invariante.
+
+4. Una primera hipótesis para que se presente la condición de carrera para dicha función (pause and check), es que el programa consulta la lista cuyos valores va a imprimir, a la vez que otros hilos modifican sus valores. Para corregir esto, haga lo que sea necesario para que efectivamente, antes de imprimir los resultados actuales, se pausen todos los demás hilos. Adicionalmente, implemente la opción ‘resume’.
+
+   Se implementa correctamente los botones de pause y de resume, se crean metodos nuevos para immortals con el objetivo de poder controlar el hecho de que dejen de correr independientemente sin usar obligatoriamente el wait(), si no desde el run()
+
+
+5. Verifique nuevamente el funcionamiento (haga clic muchas veces en el botón). Se cumple o no el invariante?.
+
+   Se sigue incumpliendo :c 
+
+6. Identifique posibles regiones críticas en lo que respecta a la pelea de los inmortales. Implemente una estrategia de bloqueo que evite las condiciones de carrera. Recuerde que si usted requiere usar dos o más ‘locks’ simultáneamente, puede usar bloques sincronizados anidados:
