@@ -83,30 +83,34 @@ public class Immortal extends Thread {
 
     }
 
+
     public void fight(Immortal i2) {
         AtomicInteger i2Health = i2.getHealth();
 
-        if(i2Health.get() > 0 && this.health.get() > 0){
-            synchronized ((immortalsPopulation.indexOf(i2) < immortalsPopulation.indexOf(this))?i2:this) {
-                synchronized ((immortalsPopulation.indexOf(i2) > immortalsPopulation.indexOf(this))?i2:this) {
-                    if (i2Health.get() > 0 && this.health.get() > 0) {
-                        i2.changeHealth(i2.getHealth().get() - defaultDamageValue);
-                        this.health.addAndGet(defaultDamageValue);
+        if (i2Health.get() > 0 && this.getHealth().get() > 0) {
+            Immortal firstLock = (immortalsPopulation.indexOf(i2) < immortalsPopulation.indexOf(this)) ? i2 : this;
+            Immortal secondLock = (immortalsPopulation.indexOf(i2) > immortalsPopulation.indexOf(this)) ? i2 : this;
+
+            synchronized (firstLock) {
+                synchronized (secondLock) {
+                    if (i2Health.get() > 0 && this.getHealth().get() > 0) {
+                        i2.changeHealth(i2.getHealth().get() - this.defaultDamageValue);
+                        this.getHealth().addAndGet(this.defaultDamageValue);
                         updateCallback.processReport("Fight: " + this + " vs " + i2 + "\n");
                     } else {
-                        if(i2Health.get() == 0){
+                        if (i2Health.get() == 0) {
                             killOpponent(i2);
                             updateCallback.processReport(this + " says:" + i2 + " is already dead!\n");
                         } else {
                             killOpponent(this);
                             updateCallback.processReport(this + " says:" + this + " is already dead!\n");
                         }
-                        
                     }
                 }
             }
         }
     }
+
 
     public void declareWinner(Immortal i){
         updateCallback.processReport( this + " is the winner >w<"+"\n");
