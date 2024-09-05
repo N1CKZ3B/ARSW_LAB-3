@@ -2,9 +2,11 @@
 ## Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software – ARSW
 
-Integrantes: 
-- Nicolás Achuri
-- Ricardo Villamizar
+----------------------------------------------------
+Realizado por: 
+- Nicolás Sebastian Achuri Macias
+- Ricardo Andrés Villamizar Mendez
+-------------------------------------------------------
 
 #### Ejercicio – programación concurrente, condiciones de carrera y sincronización de hilos. EJERCICIO INDIVIDUAL O EN PAREJAS.
 
