@@ -2,6 +2,9 @@
 ## Escuela Colombiana de Ingeniería
 ### Arquitecturas de Software – ARSW
 
+Integrantes: 
+- Nicolás Achuri
+- Ricardo Villamizar
 
 #### Ejercicio – programación concurrente, condiciones de carrera y sincronización de hilos. EJERCICIO INDIVIDUAL O EN PAREJAS.
 
@@ -119,7 +122,7 @@ Un gran problema que puede surgir es que se suceda una condición carrera, dado 
 
 	* Corrija el problema anterior __SIN hacer uso de sincronización__, pues volver secuencial el acceso a la lista compartida de inmortales haría extremadamente lenta la simulación.
 
-	En ningún momento se accede a una lista sincronizada, se resuelve directamente al no contar con las personas que ya están muertas, así que no hay ningún tracker de la lista principal, solo van muriendo hasta que se llega a la condición final de un ganador (o bucle entre dos inmortales).
+En ningún momento se accede a una lista sincronizada, se resuelve directamente al no contar con las personas que ya están muertas, así que no hay ningún tracker de la lista principal, solo van muriendo hasta que se llega a la condición final de un ganador (o bucle entre dos inmortales).
 
 11. Para finalizar, implemente la opción STOP.
 
