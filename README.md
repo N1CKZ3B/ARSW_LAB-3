@@ -10,8 +10,28 @@
 Control de hilos con wait/notify. Productor/consumidor.
 
 1. Revise el funcionamiento del programa y ejecútelo. Mientras esto ocurren, ejecute jVisualVM y revise el consumo de CPU del proceso correspondiente. A qué se debe este consumo?, cual es la clase responsable?
+
+
+![alt text](image.png)
+
+   Se sabe que la clase Producer y la clase Consumer se ejecutan en hilos separados sin embargo, el mayor consumo se le atribuye a la clase Consumer, 
+   dado que este no tiene nigun tipo de tiempo de espera. En ambas clases se ejecuta un start() lo que permite que se cree un nuevo hilo y asi mismo 
+   ejecutar el metodo run por cada nuevo Producer y Consumer
+
+
 2. Haga los ajustes necesarios para que la solución use más eficientemente la CPU, teniendo en cuenta que -por ahora- la producción es lenta y el consumo es rápido. Verifique con JVisualVM que el consumo de CPU se reduzca.
+
+![alt text](image-1.png)
+
+   Se realizan cambios en la clase de consumidor, productor y startProduction en este caso creando un objeto de sincronizacion 
+   entre consumidor y productor y haciendo que el consumidor tenga que esperar al productor para poder hacer su debida acción.
+
+
 3. Haga que ahora el productor produzca muy rápido, y el consumidor consuma lento. Teniendo en cuenta que el productor conoce un límite de Stock (cuantos elementos debería tener, a lo sumo en la cola), haga que dicho límite se respete. Revise el API de la colección usada como cola para ver cómo garantizar que dicho límite no se supere. Verifique que, al poner un límite pequeño para el 'stock', no haya consumo alto de CPU ni errores.
+
+![alt text](image-2.png)
+
+   Se crea una variable de sincronización que permite que el consumidor consuma más lento y que cuando haya comido todo le notifique al productor que debe producir nuevamente, de este mismo modo, se respeta el límite al sincronizar esto mismo y utilizar un wait para dejar de producir hasta que nuevamente el consumidor le vuelva a notificar que lo debe hacer nuevamente.
 
 
 ##### Parte II. – Antes de terminar la clase.
@@ -20,6 +40,12 @@ Teniendo en cuenta los conceptos vistos de condición de carrera y sincronizaci�
 
 - La búsqueda distribuida se detenga (deje de buscar en las listas negras restantes) y retorne la respuesta apenas, en su conjunto, los hilos hayan detectado el número de ocurrencias requerido que determina si un host es confiable o no (_BLACK_LIST_ALARM_COUNT_).
 - Lo anterior, garantizando que no se den condiciones de carrera.
+
+
+   Se garantiza que no se generen condiciones carrera al crear un bloque sincronizado con un objeto que nos va a ayudar a llevar los casos concurrentes, en este caso y especialmente sobre el conteo de ocurrencias encontradas, cuando este valor llegue al máximo que se estaba buscando va a parar la ejecución y va a mostrar los resultados, cabe aclarar que para lograr esto no se modificó nada más que la clase de HostBlackListValidator y el MaliciousHostCounter
+
+
+
 
 ##### Parte III. – Avance para el martes, antes de clase.
 
@@ -36,11 +62,19 @@ Sincronización y Dead-Locks.
 
 2. Revise el código e identifique cómo se implemento la funcionalidad antes indicada. Dada la intención del juego, un invariante debería ser que la sumatoria de los puntos de vida de todos los jugadores siempre sea el mismo(claro está, en un instante de tiempo en el que no esté en proceso una operación de incremento/reducción de tiempo). Para este caso, para N jugadores, cual debería ser este valor?.
 
+   Al verificar el código se presupone que los N inmortales van a tener todos la misma cantidad de vida, se presupone que siempre la sumatoria de estos debe ser N*vidaporinmortal , en este caso siempre, hasta incluso cuando haya un ganador debe tener este último como vida la misma que este tiene sumada la de sus N-1 contrincantes.
+
 3. Ejecute la aplicación y verifique cómo funcionan las opción ‘pause and check’. Se cumple el invariante?.
+
+Al momento de hacer el primer pause and check casi instantaneo los valores ya cambian, en este caso con 3 inmortales que comienzan la partida al cabo de poco tiempo tienen una sumatoria de 300 cuando al principio a cada uno le fueron dados 100 puntos de vida, no se cumple el invariante.
 
 4. Una primera hipótesis para que se presente la condición de carrera para dicha función (pause and check), es que el programa consulta la lista cuyos valores va a imprimir, a la vez que otros hilos modifican sus valores. Para corregir esto, haga lo que sea necesario para que efectivamente, antes de imprimir los resultados actuales, se pausen todos los demás hilos. Adicionalmente, implemente la opción ‘resume’.
 
+   Se implementa correctamente los botones de pause y de resume, se crean metodos nuevos para immortals con el objetivo de poder controlar el hecho de que dejen de correr independientemente sin usar obligatoriamente el wait(), si no desde el run()
+
 5. Verifique nuevamente el funcionamiento (haga clic muchas veces en el botón). Se cumple o no el invariante?.
+
+A cada check no se mantiene el invariante.
 
 6. Identifique posibles regiones críticas en lo que respecta a la pelea de los inmortales. Implemente una estrategia de bloqueo que evite las condiciones de carrera. Recuerde que si usted requiere usar dos o más ‘locks’ simultáneamente, puede usar bloques sincronizados anidados:
 
@@ -52,17 +86,37 @@ Sincronización y Dead-Locks.
 	}
 	```
 
+![alt text](image-6.png)
+
 7. Tras implementar su estrategia, ponga a correr su programa, y ponga atención a si éste se llega a detener. Si es así, use los programas jps y jstack para identificar por qué el programa se detuvo.
 
 8. Plantee una estrategia para corregir el problema antes identificado (puede revisar de nuevo las páginas 206 y 207 de _Java Concurrency in Practice_).
 
+No hubo necesidad de implementar otra estrategia dada la anterior.
+
 9. Una vez corregido el problema, rectifique que el programa siga funcionando de manera consistente cuando se ejecutan 100, 1000 o 10000 inmortales. Si en estos casos grandes se empieza a incumplir de nuevo el invariante, debe analizar lo realizado en el paso 4.
+
+![alt text](image-7.png)
+
+![alt text](image-8.png)
+
+Con el problema solucionado se puede ver que con grandes sumas de inmortales se sigue cumpliendo el invariante.
+
 
 10. Un elemento molesto para la simulación es que en cierto punto de la misma hay pocos 'inmortales' vivos realizando peleas fallidas con 'inmortales' ya muertos. Es necesario ir suprimiendo los inmortales muertos de la simulación a medida que van muriendo. Para esto:
 	* Analizando el esquema de funcionamiento de la simulación, esto podría crear una condición de carrera? Implemente la funcionalidad, ejecute la simulación y observe qué problema se presenta cuando hay muchos 'inmortales' en la misma. Escriba sus conclusiones al respecto en el archivo RESPUESTAS.txt.
+
+	![alt text](image-9.png)
+
+	Un gran problema que puede surgir es que se suceda una condición carrera, dado que varios hilos intentarían acceder a la misma variable y traten de eliminar un hilo al mismo tiempo, debido a que la lista se modifica de manera concurrente.
+
 	* Corrija el problema anterior __SIN hacer uso de sincronización__, pues volver secuencial el acceso a la lista compartida de inmortales haría extremadamente lenta la simulación.
 
+	En ningún momento se accede a una lista sincronizada, se resuelve directamente al no contar con las personas que ya están muertas, así que no hay ningún tracker de la lista principal, solo van muriendo hasta que se llega a la condición final de un ganador (o bucle entre dos inmortales).
+
 11. Para finalizar, implemente la opción STOP.
+
+![alt text](image-10.png)
 
 <!--
 ### Criterios de evaluación
