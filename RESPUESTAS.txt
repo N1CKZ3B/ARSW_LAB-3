@@ -44,3 +44,18 @@ Parte III
    Se sigue incumpliendo :c 
 
 6. Identifique posibles regiones críticas en lo que respecta a la pelea de los inmortales. Implemente una estrategia de bloqueo que evite las condiciones de carrera. Recuerde que si usted requiere usar dos o más ‘locks’ simultáneamente, puede usar bloques sincronizados anidados:
+   Imagen adjunta del código en el Readme.
+
+7. Tras implementar su estrategia, ponga a correr su programa, y ponga atención a si éste se llega a detener. Si es así, use los programas jps y jstack para identificar por qué el programa se detuvo.
+
+8. Plantee una estrategia para corregir el problema antes identificado (puede revisar de nuevo las páginas 206 y 207 de Java Concurrency in Practice).
+   No hubo necesidad de implementar otra estrategia dada la anterior.
+
+9. Una vez corregido el problema, rectifique que el programa siga funcionando de manera consistente cuando se ejecutan 100, 1000 o 10000 inmortales. Si en estos casos grandes se empieza a incumplir de nuevo el invariante, debe analizar lo realizado en el paso 4.
+   Visible en el Readme que se cumple el invariante.
+
+10. * Corrija el problema anterior __SIN hacer uso de sincronización__, pues volver secuencial el acceso a la lista compartida de inmortales haría extremadamente lenta la simulación.
+   En ningún momento se accede a una lista sincronizada, se resuelve directamente al no contar con las personas que ya están muertas, así que no hay ningún tracker de la lista principal, solo van muriendo hasta que se llega a la condición final de un ganador (o bucle entre dos inmortales).
+
+11.Para finalizar, implemente la opción STOP.
+Imagen del código provista en el Readme.
