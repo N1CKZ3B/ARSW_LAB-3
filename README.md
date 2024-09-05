@@ -12,7 +12,8 @@ Control de hilos con wait/notify. Productor/consumidor.
 1. Revise el funcionamiento del programa y ejecútelo. Mientras esto ocurren, ejecute jVisualVM y revise el consumo de CPU del proceso correspondiente. A qué se debe este consumo?, cual es la clase responsable?
 
 
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/074833d3-9243-45f2-8eed-1cec03896a5e)
+
 
    Se sabe que la clase Producer y la clase Consumer se ejecutan en hilos separados sin embargo, el mayor consumo se le atribuye a la clase Consumer, 
    dado que este no tiene nigun tipo de tiempo de espera. En ambas clases se ejecuta un start() lo que permite que se cree un nuevo hilo y asi mismo 
@@ -21,7 +22,8 @@ Control de hilos con wait/notify. Productor/consumidor.
 
 2. Haga los ajustes necesarios para que la solución use más eficientemente la CPU, teniendo en cuenta que -por ahora- la producción es lenta y el consumo es rápido. Verifique con JVisualVM que el consumo de CPU se reduzca.
 
-![alt text](image-1.png)
+![image](https://github.com/user-attachments/assets/1c79a1c0-f2c3-474e-85bf-cde354abad1d)
+
 
    Se realizan cambios en la clase de consumidor, productor y startProduction en este caso creando un objeto de sincronizacion 
    entre consumidor y productor y haciendo que el consumidor tenga que esperar al productor para poder hacer su debida acción.
@@ -29,9 +31,10 @@ Control de hilos con wait/notify. Productor/consumidor.
 
 3. Haga que ahora el productor produzca muy rápido, y el consumidor consuma lento. Teniendo en cuenta que el productor conoce un límite de Stock (cuantos elementos debería tener, a lo sumo en la cola), haga que dicho límite se respete. Revise el API de la colección usada como cola para ver cómo garantizar que dicho límite no se supere. Verifique que, al poner un límite pequeño para el 'stock', no haya consumo alto de CPU ni errores.
 
-![alt text](image-2.png)
+![image](https://github.com/user-attachments/assets/0de7aabc-3fca-4874-bebc-5661f5398701)
 
-   Se crea una variable de sincronización que permite que el consumidor consuma más lento y que cuando haya comido todo le notifique al productor que debe producir nuevamente, de este mismo modo, se respeta el límite al sincronizar esto mismo y utilizar un wait para dejar de producir hasta que nuevamente el consumidor le vuelva a notificar que lo debe hacer nuevamente.
+
+Se crea una variable de sincronización que permite que el consumidor consuma más lento y que cuando haya comido todo le notifique al productor que debe producir nuevamente, de este mismo modo, se respeta el límite al sincronizar esto mismo y utilizar un wait para dejar de producir hasta que nuevamente el consumidor le vuelva a notificar que lo debe hacer nuevamente.
 
 
 ##### Parte II. – Antes de terminar la clase.
@@ -86,7 +89,8 @@ A cada check no se mantiene el invariante.
 	}
 	```
 
-![alt text](image-6.png)
+![image](https://github.com/user-attachments/assets/3f866f2f-4e93-4fc6-8293-59df71b475e5)
+
 
 7. Tras implementar su estrategia, ponga a correr su programa, y ponga atención a si éste se llega a detener. Si es así, use los programas jps y jstack para identificar por qué el programa se detuvo.
 
@@ -96,9 +100,11 @@ No hubo necesidad de implementar otra estrategia dada la anterior.
 
 9. Una vez corregido el problema, rectifique que el programa siga funcionando de manera consistente cuando se ejecutan 100, 1000 o 10000 inmortales. Si en estos casos grandes se empieza a incumplir de nuevo el invariante, debe analizar lo realizado en el paso 4.
 
-![alt text](image-7.png)
+![image](https://github.com/user-attachments/assets/af3b7e84-e6ad-4297-a343-f0a3145aede7)
 
-![alt text](image-8.png)
+
+![image](https://github.com/user-attachments/assets/91545c50-0b78-49a1-afe2-137bfdaa441e)
+
 
 Con el problema solucionado se puede ver que con grandes sumas de inmortales se sigue cumpliendo el invariante.
 
@@ -106,9 +112,10 @@ Con el problema solucionado se puede ver que con grandes sumas de inmortales se 
 10. Un elemento molesto para la simulación es que en cierto punto de la misma hay pocos 'inmortales' vivos realizando peleas fallidas con 'inmortales' ya muertos. Es necesario ir suprimiendo los inmortales muertos de la simulación a medida que van muriendo. Para esto:
 	* Analizando el esquema de funcionamiento de la simulación, esto podría crear una condición de carrera? Implemente la funcionalidad, ejecute la simulación y observe qué problema se presenta cuando hay muchos 'inmortales' en la misma. Escriba sus conclusiones al respecto en el archivo RESPUESTAS.txt.
 
-	![alt text](image-9.png)
+	![image](https://github.com/user-attachments/assets/1722cdc1-e759-4bc4-a68b-2db11ee09500)
 
-	Un gran problema que puede surgir es que se suceda una condición carrera, dado que varios hilos intentarían acceder a la misma variable y traten de eliminar un hilo al mismo tiempo, debido a que la lista se modifica de manera concurrente.
+
+Un gran problema que puede surgir es que se suceda una condición carrera, dado que varios hilos intentarían acceder a la misma variable y traten de eliminar un hilo al mismo tiempo, debido a que la lista se modifica de manera concurrente.
 
 	* Corrija el problema anterior __SIN hacer uso de sincronización__, pues volver secuencial el acceso a la lista compartida de inmortales haría extremadamente lenta la simulación.
 
@@ -116,7 +123,8 @@ Con el problema solucionado se puede ver que con grandes sumas de inmortales se 
 
 11. Para finalizar, implemente la opción STOP.
 
-![alt text](image-10.png)
+![image](https://github.com/user-attachments/assets/082bb648-8619-4b5f-90fa-b75205635713)
+
 
 <!--
 ### Criterios de evaluación
